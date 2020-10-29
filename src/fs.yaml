@@ -1,0 +1,41 @@
+- source: "../source.json"
+  name: getValueForKey
+  args:
+    key: name
+    join: ','
+  destination: ./names
+- source: ./names
+  keys: input
+  name: rootRouter
+  args: 
+    resources: "<% input %>"
+  destination: router/index.js
+- source: "../source.json"
+  name: passThru
+  each: # returns an iterable
+    keys: 
+      - name # we expect each item of the output of getFunctions to have a property called 'name'
+      - schema
+    actions: 
+        - name: _basicCrudExpressResourceRouter
+          args: 
+            resource: "<% name %>"
+          destination: 'router/'
+        - name: _expressController
+          args: 
+            resource: "<% name %>"
+          destination: 'controllers/'
+        - name: mongooseModelComplex
+          args:
+            name: "<% name %>"
+            schema: "<% schema %>"
+          destination: 'models/<% name %>.js'
+        - name: _mongooseDbService
+          args:
+            resource: "<% name %>"
+          destination: 'services/'
+- name: simpleExpressWithMiddleware
+  args: 
+    resource: blog-post-app
+    port: '5858'
+  destination: server.js

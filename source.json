@@ -1,0 +1,6 @@
+[
+  { "name": "user", "schema":"name:String;email:String,req,uniq;roles:[ref(role)];permission:String" },
+  { "name": "blog-post", "schema":"content:String;title:String;user:ref(user)" },
+  { "name": "role", "schema":"name:String" },
+  { "name": "topic", "schema":"name:String" }
+]
